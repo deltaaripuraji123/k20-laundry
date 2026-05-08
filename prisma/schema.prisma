@@ -1,0 +1,120 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+}
+
+// Enums first
+enum UserRole {
+  ADMIN
+  KASIR
+}
+
+enum ServiceType {
+  KILOAN
+  SATUAN
+}
+
+enum OrderStatus {
+  DITERIMA
+  DICUCI
+  DIKERINGKAN
+  DISETRIKA
+  SELESAI
+  DIAMBIL
+}
+
+enum PaymentMethod {
+  TUNAI
+  TRANSFER
+  E_WALLET
+}
+
+enum PaymentStatus {
+  BELUM_BAYAR
+  LUNAS
+}
+
+// Models after enums
+model User {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  name      String
+  password  String
+  role      UserRole @default(ADMIN)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+
+model StoreSettings {
+  id        String   @id @default("default")
+  name      String   @default("K20 Laundry")
+  address   String   @default("Jl. Sudirman No. 123")
+  phone     String   @default("081234567890")
+  email     String   @default("contact@k20laundry.id")
+  website   String?
+  tax       Float    @default(0)
+  updatedAt DateTime @updatedAt
+}
+
+model Customer {
+  id        String   @id @default(cuid())
+  name      String
+  phone     String   @unique
+  address   String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  orders    Order[]
+}
+
+model Service {
+  id          String      @id @default(cuid())
+  name        String      @unique
+  price       Float
+  type        ServiceType
+  description String?
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+  orderItems  OrderItem[]
+}
+
+model Order {
+  id          String      @id @default(cuid())
+  orderNumber String      @unique
+  customerId  String
+  customer    Customer    @relation(fields: [customerId], references: [id], onDelete: Cascade)
+  orderDate   DateTime    @default(now())
+  pickupDate  DateTime
+  status      OrderStatus @default(DITERIMA)
+  totalPrice  Float
+  note        String?
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+  orderItems  OrderItem[]
+  payment     Payment?
+}
+
+model OrderItem {
+  id        String  @id @default(cuid())
+  orderId   String
+  order     Order   @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  serviceId String
+  service   Service @relation(fields: [serviceId], references: [id])
+  quantity  Float
+  price     Float
+  subtotal  Float
+}
+
+model Payment {
+  id        String        @id @default(cuid())
+  orderId   String        @unique
+  order     Order         @relation(fields: [orderId], references: [id])
+  method    PaymentMethod
+  status    PaymentStatus @default(BELUM_BAYAR)
+  paidAt    DateTime?
+  createdAt DateTime      @default(now())
+  updatedAt DateTime      @updatedAt
+}
