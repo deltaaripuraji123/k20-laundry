@@ -1,19 +1,8 @@
 import "dotenv/config";
 import { PrismaClient, UserRole, ServiceType } from "@prisma/client";
-import { PrismaMariaDb } from "@prisma/adapter-mariadb";
 import bcrypt from "bcryptjs";
 
-const adapter = new PrismaMariaDb({
-  host: "localhost",
-  user: "root",
-  password: "",
-  database: "k20_laundry_db",
-  port: 3306,
-});
-
-export const prisma = new PrismaClient({
-  adapter,
-});
+export const prisma = new PrismaClient();
 
 async function main() {
   const hashedPassword = await bcrypt.hash("password123", 10);
