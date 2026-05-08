@@ -7,7 +7,7 @@
   },
   "scripts": {
     "dev": "next dev --webpack",
-    "build": "cross-env PRISMA_CLIENT_ENGINE_TYPE=library prisma generate && next build",
+    "build": "cross-env PRISMA_CLIENT_ENGINE_TYPE=binary prisma generate && next build",
     "start": "next start",
     "lint": "eslint"
   },
