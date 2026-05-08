@@ -2,9 +2,6 @@
   "$schema": "https://railway.app/railway.schema.json",
   "build": {
     "builder": "NIXPACKS",
-    "env": {
-      "PRISMA_CLIENT_ENGINE_TYPE": "binary"
-    },
     "nixpacksPlan": {
       "phases": {
         "setup": {
