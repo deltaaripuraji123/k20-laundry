@@ -25,7 +25,7 @@ const formSchema = z.object({
   name: z.string().min(3, "Nama layanan minimal 3 karakter"),
   price: z.string().refine((val) => !isNaN(Number(val)) && Number(val) > 0, "Harga harus berupa angka positif"),
   type: z.enum(["KILOAN", "SATUAN"], {
-    errorMap: () => ({ message: "Pilih tipe layanan" }),
+    message: "Pilih tipe layanan",
   }),
   description: z.string().optional(),
 });
