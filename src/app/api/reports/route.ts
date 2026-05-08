@@ -4,7 +4,12 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { UserRole } from "@prisma/client";
 
+export const dynamic = "force-dynamic";
+
 export async function GET(req: Request) {
+  if (process.env.NEXT_PHASE === 'phase-production-build') {
+    return NextResponse.json({ stats: {}, orders: [] });
+  }
   const session = await getServerSession(authOptions);
 
   if (!session || (session.user.role !== UserRole.ADMIN && session.user.role !== UserRole.KASIR)) {
@@ -37,7 +42,7 @@ export async function GET(req: Request) {
     });
 
     const stats = {
-      totalRevenue: orders.reduce((acc, order) => acc + order.totalPrice, 0),
+      totalRevenue: orders.reduce((acc: number, order) => acc + order.totalPrice, 0),
       totalOrders: orders.length,
       paidOrders: orders.filter(o => o.payment?.status === "LUNAS").length,
       pendingOrders: orders.filter(o => o.payment?.status !== "LUNAS").length,
