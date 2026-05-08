@@ -7,6 +7,9 @@ import { UserRole } from "@prisma/client";
 export const dynamic = "force-dynamic";
 
 export async function GET() {
+  if (process.env.NEXT_PHASE === 'phase-production-build') {
+    return NextResponse.json([]);
+  }
   const session = await getServerSession(authOptions);
 
   if (!session || (session.user.role !== UserRole.ADMIN && session.user.role !== UserRole.KASIR)) {

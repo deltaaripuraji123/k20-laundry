@@ -7,6 +7,9 @@ export const dynamic = "force-dynamic";
 
 // GET store settings
 export async function GET() {
+  if (process.env.NEXT_PHASE === 'phase-production-build') {
+    return NextResponse.json({});
+  }
   try {
     const settings = await prisma.storeSettings.findUnique({
       where: { id: "default" },
