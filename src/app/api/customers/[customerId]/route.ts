@@ -4,11 +4,16 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { UserRole } from "@prisma/client";
 
+export const dynamic = "force-dynamic";
+
 // GET a single customer by ID
 export async function GET(
   req: Request,
   { params }: { params: Promise<{ customerId: string }> },
 ) {
+  if (process.env.NEXT_PHASE === 'phase-production-build') {
+    return NextResponse.json({});
+  }
   const session = await getServerSession(authOptions);
 
   if (!session || (session.user.role !== UserRole.ADMIN && session.user.role !== UserRole.KASIR)) {
