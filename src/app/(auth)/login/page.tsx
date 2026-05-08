@@ -4,28 +4,40 @@ import { useState } from "react";
 import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { Loader2, Sparkles, Lock, Mail, ArrowRight } from "lucide-react";
+
+import {
+  Loader2,
+  Sparkles,
+  Lock,
+  Mail,
+  ArrowRight,
+} from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+
 import {
   Card,
   CardContent,
   CardDescription,
-  CardFooter,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
 
 export default function LoginPage() {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+
+  const [isLoading, setIsLoading] = useState(false);
+
+  const handleSubmit = async (
+    e: React.FormEvent<HTMLFormElement>
+  ) => {
     e.preventDefault();
+
     setIsLoading(true);
 
     try {
@@ -38,9 +50,10 @@ export default function LoginPage() {
       if (result?.ok) {
         router.push("/dashboard");
       } else {
-        alert("Login Gagal! Periksa email dan password Anda.");
+        alert("Login gagal, periksa email dan password.");
       }
     } catch (error) {
+      console.error(error);
       alert("Terjadi kesalahan saat login.");
     } finally {
       setIsLoading(false);
@@ -48,88 +61,116 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="min-h-screen w-full flex items-center justify-center bg-[#f5f8f8] p-4 font-sans overflow-hidden relative">
-      {/* Decorative Elements */}
-      <div className="absolute top-0 left-0 w-full h-full overflow-hidden -z-10">
-        <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-[#0ddff2]/5 rounded-full blur-[120px]"></div>
-        <div className="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] bg-[#0ddff2]/10 rounded-full blur-[120px]"></div>
+    <div className="relative flex min-h-screen items-center justify-center overflow-hidden bg-[#f5f8f8] px-4 py-8 sm:px-6">
+      {/* BACKGROUND */}
+      <div className="absolute inset-0 overflow-hidden -z-10">
+        <div className="absolute left-[-20%] top-[-10%] h-[300px] w-[300px] rounded-full bg-cyan-400/10 blur-3xl sm:h-[500px] sm:w-[500px]" />
+
+        <div className="absolute bottom-[-10%] right-[-20%] h-[300px] w-[300px] rounded-full bg-cyan-400/10 blur-3xl sm:h-[500px] sm:w-[500px]" />
       </div>
 
-      <div className="w-full max-w-md animate-in fade-in slide-in-from-bottom-8 duration-700">
-        <div className="flex flex-col items-center mb-10">
-          <Link href="/" className="flex items-center gap-3 group">
-            <div className="w-14 h-14 bg-white rounded-2xl shadow-xl shadow-[#0ddff2]/10 flex items-center justify-center group-hover:scale-110 transition-transform duration-500 border border-slate-100">
-              <Sparkles className="w-8 h-8 text-[#0ddff2]" />
+      {/* CONTAINER */}
+      <div className="w-full max-w-md">
+        {/* LOGO */}
+        <div className="mb-8 flex flex-col items-center sm:mb-10">
+          <Link
+            href="/"
+            className="group flex items-center gap-3"
+          >
+            <div className="flex h-12 w-12 items-center justify-center rounded-2xl border border-slate-100 bg-white shadow-lg transition-transform duration-300 group-hover:scale-105 sm:h-14 sm:w-14">
+              <Sparkles className="h-6 w-6 text-cyan-400 sm:h-7 sm:w-7" />
             </div>
-            <span className="text-3xl font-black tracking-tight text-slate-900">
-              K20<span className="text-[#0ddff2]">Laundry</span>
+
+            <span className="text-2xl font-black tracking-tight text-slate-900 sm:text-3xl">
+              K20
+              <span className="text-cyan-400">Laundry</span>
             </span>
           </Link>
         </div>
 
-        <Card className="border-none shadow-[0_20px_50px_rgba(0,0,0,0.05)] rounded-[2.5rem] overflow-hidden bg-white">
-          <CardHeader className="space-y-3 pt-10 px-10 text-center">
-            <CardTitle className="text-3xl font-black tracking-tight text-slate-900">
+        {/* CARD */}
+        <Card className="overflow-hidden rounded-[2rem] border-none bg-white shadow-[0_20px_50px_rgba(0,0,0,0.06)]">
+          <CardHeader className="space-y-2 px-6 pb-4 pt-8 text-center sm:px-10 sm:pt-10">
+            <CardTitle className="text-2xl font-black text-slate-900 sm:text-3xl">
               Selamat Datang
             </CardTitle>
-            <CardDescription className="text-slate-500 font-medium text-base">
-              Masuk untuk mengelola cucian kesayangan Anda
+
+            <CardDescription className="text-sm font-medium text-slate-500 sm:text-base">
+              Masuk untuk mengelola laundry Anda
             </CardDescription>
           </CardHeader>
-          <CardContent className="px-10 pb-10">
-            <form onSubmit={handleSubmit} className="space-y-6">
-              <div className="space-y-2.5">
+
+          <CardContent className="px-6 pb-8 sm:px-10 sm:pb-10">
+            <form
+              onSubmit={handleSubmit}
+              className="space-y-5"
+            >
+              {/* EMAIL */}
+              <div className="space-y-2">
                 <Label
                   htmlFor="email"
-                  className="text-sm font-bold text-slate-700 ml-1 uppercase tracking-widest text-[10px]"
+                  className="ml-1 text-[10px] font-bold uppercase tracking-[0.2em] text-slate-700"
                 >
                   Email Address
                 </Label>
-                <div className="relative group">
-                  <Mail className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-slate-400 group-focus-within:text-[#0ddff2] transition-colors" />
+
+                <div className="group relative">
+                  <Mail className="absolute left-4 top-1/2 h-5 w-5 -translate-y-1/2 text-slate-400 transition-colors group-focus-within:text-cyan-400" />
+
                   <Input
                     id="email"
                     type="email"
                     placeholder="nama@email.com"
-                    className="pl-12 h-14 rounded-2xl border-slate-100 bg-slate-50/50 focus-visible:ring-1 focus-visible:ring-[#0ddff2] transition-all font-medium"
                     value={email}
-                    onChange={(e) => setEmail(e.target.value)}
+                    onChange={(e) =>
+                      setEmail(e.target.value)
+                    }
                     required
+                    className="h-12 rounded-2xl border-slate-100 bg-slate-50/70 pl-12 text-base focus-visible:ring-2 focus-visible:ring-cyan-400 sm:h-14"
                   />
                 </div>
               </div>
-              <div className="space-y-2.5">
-                <div className="flex items-center justify-between ml-1">
+
+              {/* PASSWORD */}
+              <div className="space-y-2">
+                <div className="flex items-center justify-between">
                   <Label
                     htmlFor="password"
-                    className="text-sm font-bold text-slate-700 uppercase tracking-widest text-[10px]"
+                    className="ml-1 text-[10px] font-bold uppercase tracking-[0.2em] text-slate-700"
                   >
                     Password
                   </Label>
-                  <Link
-                    href="#"
-                    className="text-[10px] font-black text-[#0ddff2] hover:underline uppercase tracking-widest"
+
+                  <button
+                    type="button"
+                    className="text-[10px] font-black uppercase tracking-[0.2em] text-cyan-400 hover:underline"
                   >
                     Lupa Password?
-                  </Link>
+                  </button>
                 </div>
-                <div className="relative group">
-                  <Lock className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-slate-400 group-focus-within:text-[#0ddff2] transition-colors" />
+
+                <div className="group relative">
+                  <Lock className="absolute left-4 top-1/2 h-5 w-5 -translate-y-1/2 text-slate-400 transition-colors group-focus-within:text-cyan-400" />
+
                   <Input
                     id="password"
                     type="password"
                     placeholder="••••••••"
-                    className="pl-12 h-14 rounded-2xl border-slate-100 bg-slate-50/50 focus-visible:ring-1 focus-visible:ring-[#0ddff2] transition-all font-medium"
                     value={password}
-                    onChange={(e) => setPassword(e.target.value)}
+                    onChange={(e) =>
+                      setPassword(e.target.value)
+                    }
                     required
+                    className="h-12 rounded-2xl border-slate-100 bg-slate-50/70 pl-12 text-base focus-visible:ring-2 focus-visible:ring-cyan-400 sm:h-14"
                   />
                 </div>
               </div>
+
+              {/* BUTTON */}
               <Button
                 type="submit"
-                className="w-full h-14 rounded-2xl bg-[#0ddff2] text-slate-900 font-black text-lg hover:opacity-90 shadow-lg shadow-[#0ddff2]/20 transition-all border-none group mt-2"
                 disabled={isLoading}
+                className="mt-2 h-12 w-full rounded-2xl border-none bg-cyan-400 text-base font-black text-slate-900 shadow-lg shadow-cyan-400/20 transition-all hover:opacity-90 sm:h-14 sm:text-lg"
               >
                 {isLoading ? (
                   <>
@@ -137,19 +178,21 @@ export default function LoginPage() {
                     Memproses...
                   </>
                 ) : (
-                  <span className="flex items-center justify-center gap-2">
+                  <span className="flex items-center gap-2">
                     Masuk Sekarang
-                    <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+
+                    <ArrowRight className="h-5 w-5 transition-transform group-hover:translate-x-1" />
                   </span>
                 )}
               </Button>
             </form>
           </CardContent>
-          <CardFooter className="flex flex-col space-y-4 border-t border-slate-50 p-8 bg-slate-50/50"></CardFooter>
         </Card>
 
-        <p className="text-center mt-10 text-slate-400 text-xs font-medium">
-          © {new Date().getFullYear()} K20 Laundry. Clean with love.
+        {/* FOOTER */}
+        <p className="mt-6 text-center text-xs font-medium text-slate-400 sm:mt-8">
+          © {new Date().getFullYear()} K20 Laundry.
+          Clean with love.
         </p>
       </div>
     </div>
