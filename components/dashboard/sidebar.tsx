@@ -2,19 +2,20 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { 
-  LayoutDashboard, 
-  Users, 
-  ShoppingBag, 
-  Settings, 
+import {
+  LayoutDashboard,
+  Users,
+  ShoppingBag,
+  Settings,
   History,
   Tags,
   Menu,
   X,
-  Sparkles
+  Sparkles,
 } from "lucide-react";
+
 import { cn } from "@/lib/utils";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 
 const menuItems = [
@@ -28,73 +29,117 @@ const menuItems = [
 
 export function Sidebar() {
   const pathname = usePathname();
-  const [isOpen, setIsOpen] = useState(true);
+
+  // Desktop collapse
+  const [collapsed, setCollapsed] = useState(false);
+
+  // Mobile drawer
+  const [mobileOpen, setMobileOpen] = useState(false);
+
+  // Close mobile sidebar when route changes
+  useEffect(() => {
+    setMobileOpen(false);
+  }, [pathname]);
 
   return (
     <>
-      {/* Mobile Menu Button */}
+      {/* MOBILE BUTTON */}
       <div className="lg:hidden fixed top-4 left-4 z-50">
-        <Button 
-          variant="outline" 
-          size="icon" 
-          onClick={() => setIsOpen(!isOpen)}
-          className="border-sidebar-border bg-sidebar text-sidebar-foreground"
+        <Button
+          size="icon"
+          variant="outline"
+          onClick={() => setMobileOpen(true)}
+          className="bg-sidebar border-sidebar-border"
         >
-          {isOpen ? <X className="h-4 w-4" /> : <Menu className="h-4 w-4" />}
+          <Menu className="w-5 h-5" />
         </Button>
       </div>
 
-      <aside 
+      {/* MOBILE OVERLAY */}
+      {mobileOpen && (
+        <div
+          className="fixed inset-0 bg-black/50 z-40 lg:hidden"
+          onClick={() => setMobileOpen(false)}
+        />
+      )}
+
+      {/* SIDEBAR */}
+      <aside
         className={cn(
-          "fixed top-0 left-0 z-40 h-screen transition-transform bg-sidebar border-r border-sidebar-border",
-          isOpen ? "translate-x-0 w-64" : "-translate-x-full lg:translate-x-0 lg:w-20"
+          "fixed top-0 left-0 z-50 h-screen bg-sidebar border-r border-sidebar-border transition-all duration-300",
+          
+          // Desktop
+          collapsed ? "lg:w-20" : "lg:w-64",
+
+          // Mobile open/close
+          mobileOpen ? "translate-x-0" : "-translate-x-full lg:translate-x-0",
+
+          "w-64"
         )}
       >
         <div className="flex flex-col h-full">
-          <div className="h-16 flex items-center px-6 border-b border-sidebar-border shrink-0">
-            <div className="flex items-center gap-2">
-              <Sparkles className="text-[#0ddff2] w-7 h-7" />
-              {isOpen && (
-                <span className="font-bold text-xl tracking-tight text-sidebar-foreground">
-                  K20<span className="text-[#0ddff2]">Laundry</span>
+          {/* HEADER */}
+          <div className="h-16 flex items-center justify-between px-4 border-b border-sidebar-border">
+            <div className="flex items-center gap-2 overflow-hidden">
+              <Sparkles className="w-7 h-7 text-cyan-400 shrink-0" />
+
+              {(!collapsed || mobileOpen) && (
+                <span className="font-bold text-xl whitespace-nowrap">
+                  K20
+                  <span className="text-cyan-400">Laundry</span>
                 </span>
               )}
             </div>
+
+            {/* MOBILE CLOSE */}
+            <button
+              onClick={() => setMobileOpen(false)}
+              className="lg:hidden"
+            >
+              <X className="w-5 h-5" />
+            </button>
           </div>
 
-          <nav className="flex-1 overflow-y-auto py-4 px-3 space-y-1">
+          {/* MENU */}
+          <nav className="flex-1 overflow-y-auto px-3 py-4 space-y-1">
             {menuItems.map((item) => {
-              // Jika href adalah /dashboard, check exact match. 
-              // Jika lainnya, check apakah pathname dimulai dengan href tersebut.
-              const isActive = item.href === "/dashboard" 
-                ? pathname === "/dashboard" 
-                : pathname.startsWith(item.href);
-              
+              const isActive =
+                item.href === "/dashboard"
+                  ? pathname === "/dashboard"
+                  : pathname.startsWith(item.href);
+
               return (
                 <Link
                   key={item.href}
                   href={item.href}
                   className={cn(
-                    "flex items-center gap-3 px-3 py-2.5 rounded-xl transition-all group relative font-medium",
-                    isActive 
-                      ? "bg-[#0ddff2]/10 text-[#0ddff2]" 
-                      : "text-sidebar-foreground/60 hover:bg-sidebar-accent hover:text-sidebar-foreground"
+                    "relative flex items-center gap-3 rounded-xl px-3 py-3 transition-all font-medium group",
+                    isActive
+                      ? "bg-cyan-400/10 text-cyan-400"
+                      : "text-sidebar-foreground/70 hover:bg-sidebar-accent hover:text-sidebar-foreground"
                   )}
                 >
-                  <item.icon className={cn(
-                    "w-5 h-5 shrink-0 transition-colors",
-                    isActive ? "text-[#0ddff2]" : "text-sidebar-foreground/40 group-hover:text-sidebar-foreground/70"
-                  )} />
-                  {isOpen && <span>{item.label}</span>}
-                  
-                  {/* Active Indicator */}
-                  {isActive && (
-                    <div className="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-6 bg-[#0ddff2] rounded-r-full" />
+                  <item.icon
+                    className={cn(
+                      "w-5 h-5 shrink-0",
+                      isActive
+                        ? "text-cyan-400"
+                        : "text-sidebar-foreground/50"
+                    )}
+                  />
+
+                  {(!collapsed || mobileOpen) && (
+                    <span>{item.label}</span>
                   )}
 
-                  {/* Tooltip for collapsed state */}
-                  {!isOpen && (
-                    <div className="absolute left-14 bg-slate-900 dark:bg-slate-50 text-white dark:text-slate-900 text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity whitespace-nowrap z-50">
+                  {/* ACTIVE INDICATOR */}
+                  {isActive && (
+                    <div className="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-6 bg-cyan-400 rounded-r-full" />
+                  )}
+
+                  {/* TOOLTIP DESKTOP COLLAPSED */}
+                  {collapsed && !mobileOpen && (
+                    <div className="absolute left-14 opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity bg-black text-white text-xs rounded px-2 py-1 whitespace-nowrap z-50">
                       {item.label}
                     </div>
                   )}
@@ -103,17 +148,19 @@ export function Sidebar() {
             })}
           </nav>
 
-          <div className="p-4 border-t border-sidebar-border shrink-0">
-            <Button 
-              variant="ghost" 
+          {/* FOOTER */}
+          <div className="p-4 border-t border-sidebar-border hidden lg:block">
+            <Button
+              variant="ghost"
+              onClick={() => setCollapsed(!collapsed)}
               className={cn(
-                "w-full justify-start gap-3 text-sidebar-foreground/60 hover:text-sidebar-foreground hover:bg-sidebar-accent",
-                !isOpen && "justify-center"
+                "w-full gap-3 justify-start",
+                collapsed && "justify-center"
               )}
-              onClick={() => setIsOpen(!isOpen)}
             >
               <Menu className="w-5 h-5" />
-              {isOpen && <span>Sembunyikan Menu</span>}
+
+              {!collapsed && <span>Sembunyikan Menu</span>}
             </Button>
           </div>
         </div>
