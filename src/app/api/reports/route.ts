@@ -42,10 +42,10 @@ export async function GET(req: Request) {
     });
 
     const stats = {
-      totalRevenue: orders.reduce((acc: number, order) => acc + order.totalPrice, 0),
+      totalRevenue: orders.reduce((acc: number, order: any) => acc + order.totalPrice, 0),
       totalOrders: orders.length,
-      paidOrders: orders.filter(o => o.payment?.status === "LUNAS").length,
-      pendingOrders: orders.filter(o => o.payment?.status !== "LUNAS").length,
+      paidOrders: orders.filter((o: any) => o.payment?.status === "LUNAS").length,
+      pendingOrders: orders.filter((o: any) => o.payment?.status !== "LUNAS").length,
     };
 
     return new NextResponse(

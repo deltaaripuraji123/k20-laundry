@@ -5,7 +5,13 @@ import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import Link from "next/link";
 
+export const dynamic = "force-dynamic";
+
 export default async function DashboardPage() {
+  if (process.env.NEXT_PHASE === 'phase-production-build') {
+    return <div />;
+  }
+  
   const totalCustomers = await prisma.customer.count();
   const totalOrders = await prisma.order.count();
   const totalServices = await prisma.service.count();
@@ -136,7 +142,7 @@ export default async function DashboardPage() {
                   <p className="text-slate-400 font-medium">Belum ada pesanan.</p>
                 </div>
               ) : (
-                recentOrders.map((order) => (
+                recentOrders.map((order: any) => (
                   <div key={order.id} className="flex items-center justify-between p-4 rounded-2xl hover:bg-slate-50/50 transition-all group">
                     <div className="flex items-center gap-4">
                       <div className="w-10 h-10 rounded-xl bg-slate-50 border border-slate-100 flex items-center justify-center font-bold text-slate-400 text-[10px]">
@@ -145,7 +151,7 @@ export default async function DashboardPage() {
                       <div>
                         <p className="font-semibold text-slate-800">{order.customer.name}</p>
                         <p className="text-xs text-slate-400 font-medium whitespace-nowrap overflow-hidden text-ellipsis max-w-[150px]">
-                          {order.orderItems.map(item => item.service.name).join(", ")}
+                          {order.orderItems.map((item: any) => item.service.name).join(", ")}
                         </p>
                       </div>
                     </div>
