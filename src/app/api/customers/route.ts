@@ -4,6 +4,8 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { UserRole } from "@prisma/client";
 
+export const dynamic = "force-dynamic";
+
 // GET all customers
 export async function GET() {
   const session = await getServerSession(authOptions);
