@@ -217,7 +217,7 @@ export default function ReportsPage() {
               </div>
             </div>
             <div className="space-y-1">
-              <p className="text-muted-foreground font-bold text-xs uppercase tracking-wider">Total Terbayar (Cash)</p>
+              <p className="text-muted-foreground font-bold text-xs uppercase tracking-wider">Total Terbayar</p>
               <div className="flex flex-col gap-1">
                 <h3 className="text-2xl font-black text-foreground leading-none">
                   Rp {data?.stats.totalPaid.toLocaleString()}
