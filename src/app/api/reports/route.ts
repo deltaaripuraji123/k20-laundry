@@ -43,6 +43,12 @@ export async function GET(req: Request) {
 
     const stats = {
       totalRevenue: orders.reduce((acc: number, order: any) => acc + order.totalPrice, 0),
+      totalPaid: orders
+        .filter((o: any) => o.payment?.status === "LUNAS")
+        .reduce((acc: number, order: any) => acc + order.totalPrice, 0),
+      totalUnpaid: orders
+        .filter((o: any) => o.payment?.status !== "LUNAS")
+        .reduce((acc: number, order: any) => acc + order.totalPrice, 0),
       totalOrders: orders.length,
       paidOrders: orders.filter((o: any) => o.payment?.status === "LUNAS").length,
       pendingOrders: orders.filter((o: any) => o.payment?.status !== "LUNAS").length,

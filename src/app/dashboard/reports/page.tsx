@@ -18,6 +18,8 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/com
 
 interface Stats {
   totalRevenue: number;
+  totalPaid: number;
+  totalUnpaid: number;
   totalOrders: number;
   paidOrders: number;
   pendingOrders: number;
@@ -105,8 +107,16 @@ export default function ReportsPage() {
         <table className="w-full border-collapse border border-slate-300">
           <tbody>
             <tr>
-              <td className="border border-slate-300 p-3 bg-slate-100 font-bold w-1/3 text-slate-700">Total Pendapatan</td>
-              <td className="border border-slate-300 p-3 text-xl font-black text-[#0bbdc9]">Rp {data?.stats.totalRevenue.toLocaleString()}</td>
+              <td className="border border-slate-300 p-3 bg-slate-100 font-bold w-1/3 text-slate-700">Total Pendapatan (Gross)</td>
+              <td className="border border-slate-300 p-3 text-xl font-black text-slate-900">Rp {data?.stats.totalRevenue.toLocaleString()}</td>
+            </tr>
+            <tr>
+              <td className="border border-slate-300 p-3 bg-slate-100 font-bold w-1/3 text-slate-700">Total Terbayar (Cash)</td>
+              <td className="border border-slate-300 p-3 text-xl font-black text-emerald-600">Rp {data?.stats.totalPaid.toLocaleString()}</td>
+            </tr>
+            <tr>
+              <td className="border border-slate-300 p-3 bg-slate-100 font-bold w-1/3 text-slate-700">Total Tagihan (Piutang)</td>
+              <td className="border border-slate-300 p-3 text-xl font-black text-rose-500">Rp {data?.stats.totalUnpaid.toLocaleString()}</td>
             </tr>
             <tr>
               <td className="border border-slate-300 p-3 bg-slate-100 font-bold text-slate-700">Total Pesanan</td>
@@ -181,8 +191,8 @@ export default function ReportsPage() {
         </CardContent>
       </Card>
 
-      {/* Stats Cards - Hidden on Print */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 print:hidden">
+      {/* Financial Stats */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 print:hidden">
         <Card className="border-none shadow-[0_2px_10px_rgba(0,0,0,0.02)] rounded-[32px] bg-card overflow-hidden group">
           <CardContent className="p-8 relative">
             <div className="absolute top-0 right-0 p-8">
@@ -191,25 +201,9 @@ export default function ReportsPage() {
               </div>
             </div>
             <div className="space-y-1">
-              <p className="text-muted-foreground font-bold text-xs uppercase tracking-wider">Total Pendapatan</p>
+              <p className="text-muted-foreground font-bold text-xs uppercase tracking-wider">Total Pendapatan (Gross)</p>
               <h3 className="text-2xl font-black text-foreground leading-none">
                 Rp {data?.stats.totalRevenue.toLocaleString()}
-              </h3>
-            </div>
-          </CardContent>
-        </Card>
-
-        <Card className="border-none shadow-[0_2px_10px_rgba(0,0,0,0.02)] rounded-[32px] bg-card overflow-hidden group">
-          <CardContent className="p-8 relative">
-            <div className="absolute top-0 right-0 p-8">
-              <div className="w-12 h-12 rounded-2xl bg-indigo-500/10 flex items-center justify-center text-indigo-500 group-hover:scale-110 transition-transform">
-                <ShoppingBag className="h-6 w-6" />
-              </div>
-            </div>
-            <div className="space-y-1">
-              <p className="text-muted-foreground font-bold text-xs uppercase tracking-wider">Total Pesanan</p>
-              <h3 className="text-2xl font-black text-foreground leading-none">
-                {data?.stats.totalOrders} <span className="text-sm font-medium text-muted-foreground ml-1">Order</span>
               </h3>
             </div>
           </CardContent>
@@ -223,26 +217,75 @@ export default function ReportsPage() {
               </div>
             </div>
             <div className="space-y-1">
-              <p className="text-muted-foreground font-bold text-xs uppercase tracking-wider">Lunas</p>
-              <h3 className="text-2xl font-black text-foreground leading-none">
-                {data?.stats.paidOrders} <span className="text-sm font-medium text-muted-foreground ml-1">Order</span>
-              </h3>
+              <p className="text-muted-foreground font-bold text-xs uppercase tracking-wider">Total Terbayar (Cash)</p>
+              <div className="flex flex-col gap-1">
+                <h3 className="text-2xl font-black text-foreground leading-none">
+                  Rp {data?.stats.totalPaid.toLocaleString()}
+                </h3>
+                <p className="text-[10px] text-emerald-600/70 font-medium leading-tight">
+                  Dari {data?.stats.paidOrders} transaksi yang sudah diceklis lunas.
+                </p>
+              </div>
             </div>
           </CardContent>
         </Card>
 
-        <Card className="border-none shadow-[0_2px_10px_rgba(0,0,0,0.02)] rounded-[32px] bg-card overflow-hidden group">
+        <Card className="border-none shadow-[0_2px_10px_rgba(0,0,0,0.02)] rounded-[32px] bg-card overflow-hidden group border-2 border-rose-500/20">
           <CardContent className="p-8 relative">
             <div className="absolute top-0 right-0 p-8">
-              <div className="w-12 h-12 rounded-2xl bg-amber-500/10 flex items-center justify-center text-amber-500 group-hover:scale-110 transition-transform">
-                <Clock className="h-6 w-6" />
+              <div className="w-12 h-12 rounded-2xl bg-rose-500/10 flex items-center justify-center text-rose-500 group-hover:scale-110 transition-transform">
+                <FileText className="h-6 w-6" />
               </div>
             </div>
             <div className="space-y-1">
-              <p className="text-muted-foreground font-bold text-xs uppercase tracking-wider">Belum Bayar</p>
-              <h3 className="text-2xl font-black text-foreground leading-none">
-                {data?.stats.pendingOrders} <span className="text-sm font-medium text-muted-foreground ml-1">Order</span>
-              </h3>
+              <p className="text-rose-500 font-bold text-xs uppercase tracking-wider">Total Tagihan (Piutang)</p>
+              <div className="flex flex-col gap-1">
+                <h3 className="text-2xl font-black text-rose-600 leading-none">
+                  Rp {data?.stats.totalUnpaid.toLocaleString()}
+                </h3>
+                <p className="text-[10px] text-rose-400 font-medium leading-tight italic">
+                  *Masuk ke sini jika status transaksi belum diceklis lunas.
+                </p>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+      </div>
+
+      {/* Order Stats */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 print:hidden">
+        <Card className="border-none shadow-[0_2px_10px_rgba(0,0,0,0.02)] rounded-[24px] bg-muted/30 overflow-hidden group">
+          <CardContent className="p-6 flex items-center gap-4">
+            <div className="w-10 h-10 rounded-xl bg-indigo-500/10 flex items-center justify-center text-indigo-500">
+              <ShoppingBag className="h-5 w-5" />
+            </div>
+            <div>
+              <p className="text-muted-foreground font-bold text-[10px] uppercase tracking-wider">Total Pesanan</p>
+              <h3 className="text-lg font-black text-foreground">{data?.stats.totalOrders} <span className="text-xs font-medium opacity-50">Order</span></h3>
+            </div>
+          </CardContent>
+        </Card>
+
+        <Card className="border-none shadow-[0_2px_10px_rgba(0,0,0,0.02)] rounded-[24px] bg-muted/30 overflow-hidden group">
+          <CardContent className="p-6 flex items-center gap-4">
+            <div className="w-10 h-10 rounded-xl bg-emerald-500/10 flex items-center justify-center text-emerald-500">
+              <CheckCircle2 className="h-5 w-5" />
+            </div>
+            <div>
+              <p className="text-muted-foreground font-bold text-[10px] uppercase tracking-wider">Pesanan Lunas</p>
+              <h3 className="text-lg font-black text-foreground">{data?.stats.paidOrders} <span className="text-xs font-medium opacity-50">Order</span></h3>
+            </div>
+          </CardContent>
+        </Card>
+
+        <Card className="border-none shadow-[0_2px_10px_rgba(0,0,0,0.02)] rounded-[24px] bg-muted/30 overflow-hidden group">
+          <CardContent className="p-6 flex items-center gap-4">
+            <div className="w-10 h-10 rounded-xl bg-amber-500/10 flex items-center justify-center text-amber-500">
+              <Clock className="h-5 w-5" />
+            </div>
+            <div>
+              <p className="text-muted-foreground font-bold text-[10px] uppercase tracking-wider">Pesanan Belum Bayar</p>
+              <h3 className="text-lg font-black text-foreground">{data?.stats.pendingOrders} <span className="text-xs font-medium opacity-50">Order</span></h3>
             </div>
           </CardContent>
         </Card>
