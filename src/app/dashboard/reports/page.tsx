@@ -115,7 +115,7 @@ export default function ReportsPage() {
               <td className="border border-slate-300 p-3 text-xl font-black text-emerald-600">Rp {data?.stats.totalPaid.toLocaleString()}</td>
             </tr>
             <tr>
-              <td className="border border-slate-300 p-3 bg-slate-100 font-bold w-1/3 text-slate-700">Total Tagihan (Piutang)</td>
+              <td className="border border-slate-300 p-3 bg-slate-100 font-bold w-1/3 text-slate-700">Total Tagihan</td>
               <td className="border border-slate-300 p-3 text-xl font-black text-rose-500">Rp {data?.stats.totalUnpaid.toLocaleString()}</td>
             </tr>
             <tr>
@@ -238,7 +238,7 @@ export default function ReportsPage() {
               </div>
             </div>
             <div className="space-y-1">
-              <p className="text-rose-500 font-bold text-xs uppercase tracking-wider">Total Tagihan (Piutang)</p>
+              <p className="text-rose-500 font-bold text-xs uppercase tracking-wider">Total Tagihan</p>
               <div className="flex flex-col gap-1">
                 <h3 className="text-2xl font-black text-rose-600 leading-none">
                   Rp {data?.stats.totalUnpaid.toLocaleString()}
