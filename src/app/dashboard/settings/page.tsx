@@ -5,7 +5,6 @@ import {
   User as UserIcon, 
   Store, 
   Lock, 
-  Bell, 
   ShieldCheck,
   Save,
   Trash2,
@@ -116,7 +115,6 @@ export default function SettingsPage() {
     { id: "store", label: "Informasi Toko", icon: Store, adminOnly: true },
     { id: "security", label: "Keamanan", icon: Lock },
     { id: "users", label: "Manajemen User", icon: Users, adminOnly: true },
-    { id: "notifications", label: "Notifikasi", icon: Bell },
   ].filter(tab => !tab.adminOnly || isAdmin);
 
   useEffect(() => {
@@ -630,34 +628,6 @@ export default function SettingsPage() {
                       ))}
                     </TableBody>
                   </Table>
-                </div>
-              </CardContent>
-            </Card>
-          )}
-
-          {activeTab === "notifications" && (
-            <Card className="border-slate-200 shadow-sm">
-              <CardHeader>
-                <CardTitle>Preferensi Notifikasi</CardTitle>
-                <CardDescription>Pilih kapan Anda ingin menerima notifikasi dari sistem.</CardDescription>
-              </CardHeader>
-              <CardContent className="space-y-6">
-                <div className="space-y-4">
-                  {[
-                    { id: "notif-order", label: "Pesanan Baru", desc: "Dapatkan notifikasi ketika pelanggan membuat pesanan baru." },
-                    { id: "notif-status", label: "Perubahan Status", desc: "Dapatkan notifikasi saat status cucian berubah (Misal: Selesai)." },
-                    { id: "notif-payment", label: "Pembayaran Diterima", desc: "Dapatkan notifikasi konfirmasi pembayaran masuk." },
-                  ].map((item) => (
-                    <div key={item.id} className="flex items-start justify-between gap-4 p-4 rounded-xl hover:bg-slate-50 transition-colors">
-                      <div className="space-y-1">
-                        <Label htmlFor={item.id} className="font-semibold text-slate-900 cursor-pointer">{item.label}</Label>
-                        <p className="text-xs text-slate-500">{item.desc}</p>
-                      </div>
-                      <div className="relative inline-flex h-6 w-11 shrink-0 cursor-pointer items-center rounded-full border-2 border-transparent transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0ddff2] bg-slate-200">
-                         <span className="translate-x-0 pointer-events-none block h-5 w-5 rounded-full bg-white shadow-lg ring-0 transition-transform"></span>
-                      </div>
-                    </div>
-                  ))}
                 </div>
               </CardContent>
             </Card>
