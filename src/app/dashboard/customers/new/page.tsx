@@ -116,7 +116,6 @@ export default function NewCustomerPage() {
             </div>
             <div>
               <CardTitle className="text-lg font-bold text-slate-800">Data Personal</CardTitle>
-              <CardDescription className="font-medium text-slate-400">Pastikan nomor telepon aktif untuk notifikasi.</CardDescription>
             </div>
           </div>
         </CardHeader>
