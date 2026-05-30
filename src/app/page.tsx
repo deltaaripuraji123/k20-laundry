@@ -38,6 +38,11 @@ export default function HomePage() {
               <Link href="#kontak" className="text-sm font-medium hover:text-[#0ddff2] transition-colors">Kontak</Link>
             </nav>
             <div className="flex items-center gap-4">
+              <Link href="/login">
+                <Button className="bg-[#0ddff2] text-slate-900 font-bold hover:bg-[#0ddff2]/90">
+                  Masuk
+                </Button>
+              </Link>
               <ThemeToggle />
             </div>
           </div>
@@ -61,7 +66,18 @@ export default function HomePage() {
                 <p className="text-lg text-muted-foreground max-w-xl mx-auto lg:mx-0">
                   Solusi laundry modern untuk pakaian kesayangan Anda. Cepat, bersih, dan wangi sepanjang hari dengan teknologi pembersihan terkini.
                 </p>
-              
+                <div className="flex flex-wrap justify-center lg:justify-start gap-4">
+                  <Link href="/login">
+                    <Button size="lg" className="bg-[#0ddff2] text-slate-900 font-bold hover:bg-[#0ddff2]/90 h-14 px-8 text-lg rounded-2xl">
+                      Mulai Sekarang <ArrowRight className="ml-2 w-5 h-5" />
+                    </Button>
+                  </Link>
+                  <Link href="#layanan">
+                    <Button size="lg" variant="outline" className="h-14 px-8 text-lg rounded-2xl border-border">
+                      Lihat Layanan
+                    </Button>
+                  </Link>
+                </div>
               </div>
               <div className="flex-1 w-full max-w-2xl">
                 <div className="relative aspect-square rounded-3xl overflow-hidden shadow-2xl rotate-3 hover:rotate-0 transition-transform duration-500">

@@ -157,7 +157,7 @@ export function Topbar({ onMenuClick }: TopbarProps) {
 
               {/* LOGOUT */}
               <DropdownMenuItem
-                onClick={() => signOut()}
+                onClick={() => signOut({ callbackUrl: "/login" })}
                 className="
                   mt-1
                   cursor-pointer
